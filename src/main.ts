@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,8 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new AllExceptionsFilter()); // Use the global exception filter
+
+  app.use('/webhooks/stripe', express.raw({ type: 'application/json' })); // Stripe requires raw body for webhook verification
 
   const port = process.env.PORT || 4000;
   await app.listen(port);
