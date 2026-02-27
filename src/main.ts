@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,8 +14,11 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters(new AllExceptionsFilter()); // Use the global exception filter
+
   const port = process.env.PORT || 4000;
   await app.listen(port);
   console.log(`Application running on port ${port}`);
 }
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 bootstrap();
