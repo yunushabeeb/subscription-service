@@ -9,13 +9,23 @@ import {
 } from '@nestjs/common';
 import { WebhooksService } from './webhooks.service';
 import type { Request } from 'express';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('webhooks')
 @Controller('webhooks')
 export class WebhooksController {
   constructor(private readonly webhooksService: WebhooksService) {}
 
   @Post('stripe')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Handle Stripe webhook events' })
+  @ApiHeader({
+    name: 'stripe-signature',
+    description: 'Stripe webhook signature for verification',
+    required: true,
+  })
+  @ApiResponse({ status: 200, description: 'Webhook received and processed' })
+  @ApiResponse({ status: 400, description: 'Invalid signature or payload' })
   async handleStripeWebhook(
     @Headers('stripe-signature') signature: string,
     @Req() request: Request,
