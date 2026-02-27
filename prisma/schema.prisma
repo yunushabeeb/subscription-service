@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  name          String
+  role          Role           @default(USER)
+  status        UserStatus     @default(INACTIVE)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  subscriptions Subscription[]
+
+  @@index([email])
+  @@index([status])
+}
+
+model Subscription {
+  id         String             @id @default(uuid())
+  userId     String
+  user       User               @relation(fields: [userId], references: [id])
+  status     SubscriptionStatus @default(PENDING)
+  paymentId  String?
+  eventId    String?            @unique
+  checkoutId String?            @unique
+  startedAt  DateTime?
+  endsAt     DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model WebhookEvent {
+  id          String   @id @default(uuid())
+  eventId     String   @unique
+  type        String
+  processedAt DateTime @default(now())
+
+  @@index([eventId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  FAILED
+  CANCELLED
+}
