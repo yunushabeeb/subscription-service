@@ -20,7 +20,7 @@ import {
 @ApiTags('subscriptions')
 @ApiBearerAuth('JWT-auth') // This adds a lock icon to the Swagger UI for this controller, indicating that the endpoints require authentication. It also tells Swagger to include an Authorization header with a Bearer token (the JWT) when making requests to these endpoints from the Swagger UI, so you can test the authenticated endpoints directly from the documentation after logging in and obtaining a JWT token.
 @Controller('subscriptions')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard) // This applies the JWT authentication guard to all endpoints in this controller, ensuring that only authenticated users can access the subscription management endpoints. The guard will validate the JWT token included in the Authorization header of incoming requests and make the user's information available in the request context if the token is valid.
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 
