@@ -6,6 +6,8 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { AdminModule } from './admin/admin.module';
 import { ConfigModule } from '@nestjs/config';
+import { HealthModule } from './health/health.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { ConfigModule } from '@nestjs/config';
     SubscriptionsModule,
     WebhooksModule,
     AdminModule,
+    HealthModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

@@ -12,12 +12,14 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
+    // Find the user by email using the UsersService. If the user does not exist, throw an UnauthorizedException.
     const user = await this.usersService.findByEmail(loginDto.email);
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // Compare the provided password with the stored hashed password using bcrypt. If the passwords do not match, throw an UnauthorizedException.
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
@@ -27,6 +29,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // If the credentials are valid, create a JWT payload containing the user's ID and email, and sign it to generate an access token. Return the access token along with the user's basic information (excluding the password).
     const payload = { sub: user.id, email: user.email };
 
     return {
