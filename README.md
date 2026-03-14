@@ -346,6 +346,13 @@ docker-compose down
 docker-compose down -v
 ```
 
+**7. Run stripe web hook listener**
+In another terminal, run:
+`stripe listen --forward-to localhost:4000/webhooks/stripe`
+
+**8. Run prisma studio locally**
+`npx prisma studio --url DATABASE_URL`
+
 ---
 
 ## Environment Variables

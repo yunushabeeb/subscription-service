@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCheckoutDto {
   @ApiProperty({
-    example: 'price_1RAbCdEfGhIjKlMn',
+    example: process.env.STRIPE_PRICE_ID,
     description: 'Stripe Price ID from your Stripe dashboard',
   })
   // The price ID of the subscription plan the user wants to subscribe to
